@@ -1,0 +1,92 @@
+class MyCircularQueue {
+public:
+//pointer declaration so that memory can be dynamically created and assigned to the integer pointer
+    int * arr;
+//front fr as the front variable and back ba as the back variable
+    int fr, ba;
+	
+//size of the queue which is to be made
+    int size;
+	
+    MyCircularQueue(int k) {
+	//memory created dynamically for the queue
+        arr = new int[k];
+	//initialized fr and ba to -1 so that their emptiness can be identified easily
+        fr = ba = -1;
+		
+        size = k;
+    }
+    
+    bool enQueue(int value) {
+	//if the queue is full then no more elements can be inserted into the queue
+        if(isFull()){
+            return false;
+        }
+		
+   //else if the queue is not full then there is space for the new elements
+   
+   //if the ba and fr were initialized to -1 before then we will increment both of them to the 0 and will insert the element at the ba position of the arr
+        if(ba == -1){
+            ba++;
+            fr++;
+            arr[ba] = value;
+        }
+		
+//if there were already some elements in the queue then only increment the ba and insert the element at the new ba position 
+
+        else{
+//here we have incremented ba modually.....which means the value of ba will never go beyond size and will be in between 0 to size - 1
+            ba = (ba+1)%size;
+            arr[ba] = value;
+        }
+        
+        return true;
+    }
+    
+    bool deQueue() {
+        if(isEmpty()){
+            return false;
+        }
+//if at any case the fr and ba are pointing to the same positon it means there is only one element in the queue and after deleting it the queue become empty
+        if(fr == ba){
+            fr = -1;
+            ba = -1;
+        }
+//otherwise just simply increment the front modully so that the front remain between 0 to size -1        
+        else{
+            fr = (fr+1)%size;
+        }
+        
+        return true;
+    }
+    
+    int Front() {
+        if(isEmpty()){
+            return -1;
+        }
+        
+        return arr[fr];
+    }
+    
+    int Rear() {
+        if(isEmpty()){
+            return -1;
+        }
+        
+        return arr[ba];
+    }
+    
+    bool isEmpty() {
+	//the only condition the circular queue become empty is that both fr and ba are pointing to -1 index
+        return fr == -1 and ba == -1;
+    }
+    
+    bool isFull() {
+	//the only condition the circular queue is full is that the ba is circularly one step behind then fr
+        if((ba+1)%size == fr){
+            return true;
+        }
+        
+        return false;
+    }
+};
